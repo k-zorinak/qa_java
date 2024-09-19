@@ -1,5 +1,6 @@
 package com.example;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -18,10 +19,11 @@ public class LionTest {
     }
     @Test
     public void getKittensLion () throws Exception {
-        Lion lion = new Lion("Самец", feline);
-        int expectedGetKittens = 0;
+        Feline kitten = new Feline();
+        Lion lion = new Lion("Самка", kitten);
+        int expectedGetKittens = 1;
         int actualGetKittens = lion.getKittens();
-        assertEquals("У льва не может быть котят", expectedGetKittens, actualGetKittens);
+        assertEquals("Котят у львов - 1", expectedGetKittens, actualGetKittens);
     }
 
     @Test
@@ -41,20 +43,16 @@ public class LionTest {
     }
 
     @Test
-    public void doesHaveManeException () {
-        try{
-            Lion lion = new Lion("Белка", feline);
-        } catch(Exception exception){
-            System.out.println(exception);
-            String expected = "java.lang.Exception: Используйте допустимые значения пола животного — самец или самка";
-            assertEquals(expected, exception.toString());
-        }
-    }
-
-    @Test
     public void getFoodLion () throws Exception {
         Lion lion = new Lion("Самец", feline);
         lion.getFood();
         Mockito.verify(feline, Mockito.times(1)).getFood("Хищник");
+    }
+
+    @Test
+    public void doesHaveManeException() {
+        String exceptionExpectedMessage = "Используйте допустимые значения пола животного — самец или самка";
+        Exception trowException = Assert.assertThrows(Exception.class,() -> new Lion("Неизвестно", feline));
+        Assert.assertEquals(trowException.getMessage(), exceptionExpectedMessage);
     }
 }
